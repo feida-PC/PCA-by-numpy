@@ -1,0 +1,43 @@
+import numpy as np
+def PCA_2to1(X):
+    """
+    input:一个由n个二维向量组成的2行n列的矩阵
+    output:降维后生成的一维向量矩阵和降维示例图
+    note:二维向量的数值的绝对值不要大于10，否则会超出画图范围
+         使用前须先import numpy as np以输入原矩阵
+    example:PCA(np.array([[4,-9,6,2,7],                                
+                          [6, 0,-4,1,-5]]))
+            输出矩阵为[[ 2.12212601 -8.62600883  6.89177634  1.6316149   8.13549772]]
+    """
+    import matplotlib.pyplot as plt
+    k=1                        #目的降至k维向量
+    x=np.ones(X.shape)              #零均值化                         
+    for i in range(0,(X.shape[0])):
+        for j in range(0,(X.shape[1])):
+            x[i,j]=X[i,j]-np.mean(X[i])      
+    C=(x.dot(x.T))/x.shape[1]       #求出x的协方差矩阵C
+    eig,eigv=np.linalg.eig(C)
+    E=np.vstack((eigv,eig))       #排序选择前k个最大的特征向量
+    a=((E.T[np.lexsort(np.vstack(E))].T).T)
+    P=a[(E.shape[0]-k-1):(E.shape[0]),0:(E.shape[1])]
+    Y=P.dot(X)
+    print(Y)
+    plt.figure(figsize=(7.5,7.5))
+    plt.scatter(0, 0,c=[0,0,0])
+    for i in range(0,(X.shape[1])):
+        x=X[0,i]
+        y=X[1,i]
+        plt.scatter(x, y,c=[0,0,1])
+        s=Y[0,i]*P[0,0]
+        t=Y[0,i]*P[0,1]
+        plt.scatter(s, t,c=[0,1,0])
+    plt.xlim(-10, 10)
+    plt.ylim(-10, 10)
+    x = np.linspace(-10, 10, 50)
+    y1 = P[0,1]/P[0,0]*x
+    plt.plot(x, y1)
+    plt.text(1.7, 9.5, r'$blue\ indicates\ Original\ data$',
+             fontdict={'size': 11, 'color': 'r'})
+    plt.text(1.7, 9, r'$green\ indicates\ processed\ data$',
+             fontdict={'size': 11, 'color': 'r'})
+    plt.show()
