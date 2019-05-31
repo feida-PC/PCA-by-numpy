@@ -39,5 +39,5 @@ def PCA_2to1(X):
     plt.text(1.7, 9.5, r'$blue\ indicates\ Original\ data$',
              fontdict={'size': 11, 'color': 'r'})
     plt.text(1.7, 9, r'$green\ indicates\ processed\ data$',
-             fontdict={'size': 11, 'color': 'r'})
+             fontdict={'size': 12, 'color': 'r'})
     plt.show()
